@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    hikari:
+      auto-commit: false
+    url: jdbc:postgresql://localhost:5432/magazine
+    username: postgres
+    password: "****"
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    hibernate:
+      ddl-auto: create
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 1MB
+      max-request-size: 5MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: eyupensarezber@gmail.com
+    password: "****"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+magazine:
+  app:
+    jwtRefreshCookieName: magazine-jwt-refresh
+    jwtSecret: magazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKey
+    jwtRefreshExpirationMs: 1800000
+    accessTokenSecret: AccessTokenmagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKey
+    accessTokenExpirationMs: 60000
+    activationTokenSecret: ActivateTokenmagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKey
+    activateTokenExpirationMs: 150000
+  frontend:
+    link: http://localhost:3000

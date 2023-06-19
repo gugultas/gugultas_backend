@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:mydb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    defer-datasource-initialization: true
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+
+magazine:
+  app:
+    jwtRefreshCookieName: magazine-jwt-refresh
+    jwtSecret: magazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKey
+    accessTokenSecret: AccessTokenmagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKeymagazineSecretKey
+    accessTokenExpirationMs: 60000
+    jwtRefreshExpirationMs: 1800000
+  frontend:
+    link: http://localhost:3000

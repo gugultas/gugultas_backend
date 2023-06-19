@@ -1,0 +1,45 @@
+spring:
+  datasource:
+    hikari:
+      auto-commit: false
+    url: jdbc:postgresql://${PROD_DB_HOST}:${PROD_DB_PORT}/${PROD_DB_NAME}
+    username: ${PROD_DB_USERNAME}
+    password: ${PROD_DB_PASSWORD}
+    name: free-magazine
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    hibernate:
+      ddl-auto: update
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 2MB
+      max-request-size: 5MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_USERNAME}
+    password: ${GMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+magazine:
+  app:
+    jwtRefreshCookieName: ${REFRESH_COOKIE_NAME}
+    jwtSecret: ${JWT_REFRESH_TOKEN_SECRET}
+    jwtRefreshExpirationMs: ${REFRESH_TOKEN_EXPIRATION}
+    accessTokenSecret: ${JWT_ACCESS_TOKEN_SECRET}
+    accessTokenExpirationMs: ${ACCESS_TOKEN_EXPIRATION}
+    activationTokenSecret: ${JWT_ACTIVATION_TOKEN_SECRET}
+    activateTokenExpirationMs: ${ACTIVATION_TOKEN_EXPIRATION}
+  frontend:
+    link: ${CLIENT_URI}
