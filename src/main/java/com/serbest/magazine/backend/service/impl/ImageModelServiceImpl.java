@@ -78,7 +78,7 @@ public class ImageModelServiceImpl implements ImageModelService {
             Files.copy(inputStream, root.resolve(filename));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            throw new CustomApplicationException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new CustomApplicationException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage() + " Dosya yüklenemedi.");
         }
 
 
