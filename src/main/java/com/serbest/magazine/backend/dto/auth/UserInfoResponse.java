@@ -14,7 +14,7 @@ public class UserInfoResponse {
     private UUID userId;
     private String username;
     private String email;
-    private String image;
+    private UUID image;
     private List<String> roles;
     private String accessToken;
 }

@@ -31,6 +31,7 @@ public class UserMapper {
                 .email(requestDTO.getEmail())
                 .firstName(requestDTO.getFirstName())
                 .lastName(requestDTO.getLastName())
+                .profileImage(new ImageModel())
                 .active(true)
                 .password(passwordEncoder.encode(requestDTO.getPassword()))
                 .build();
@@ -44,7 +45,7 @@ public class UserMapper {
                 .firstName(author.getFirstName())
                 .lastName(author.getLastName())
                 .description(author.getDescription())
-                .image(author.getProfileImage())
+                .image(author.getProfileImage().getId())
                 .enabled(author.isEnabled())
                 .facebook(author.getFacebook())
                 .blog(author.getBlog())
@@ -63,7 +64,8 @@ public class UserMapper {
                 .firstName(author.getFirstName())
                 .lastName(author.getLastName())
                 .description(author.getDescription())
-                .image(author.getProfileImage())
+                .imageId(author.getProfileImage().getId())
+                .imageType(author.getProfileImage().getType())
                 .build();
     }
 
@@ -81,7 +83,7 @@ public class UserMapper {
     public RefreshTokenResponseDTO authorToRefreshTokenResponseDTO(Author author) {
         return RefreshTokenResponseDTO.builder()
                 .username(author.getUsername())
-                .image(author.getProfileImage())
+                .image(author.getProfileImage().getId())
                 .roles(author.getRoles().stream().map(r -> r.getName()).collect(Collectors.toList()))
                 .build();
     }

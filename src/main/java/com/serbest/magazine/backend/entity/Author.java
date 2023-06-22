@@ -1,5 +1,6 @@
 package com.serbest.magazine.backend.entity;
 
+import jakarta.mail.Multipart;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -45,7 +46,16 @@ public class Author {
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Like> likes;
 
-    private String profileImage;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "profile_image",
+            joinColumns = {
+                    @JoinColumn(name = "author_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "image_id", referencedColumnName = "id")
+            }
+    )
+    private ImageModel profileImage;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "author_roles",
@@ -75,7 +85,7 @@ public class Author {
 
     public Author(UUID id, String username, String email, String firstName, String lastName, String description,
                   String password, Boolean active, List<Post> posts, List<Comment> comments, List<Like> likes,
-                  String profileImage, Set<Role> roles, String facebook, String twitter, String instagram,
+                  ImageModel profileImage, Set<Role> roles, String facebook, String twitter, String instagram,
                   String youtube, String blog, LocalDateTime createDateTime, LocalDateTime updateDateTime) {
         this.id = id;
         this.username = username;
@@ -208,11 +218,11 @@ public class Author {
         this.likes = likes;
     }
 
-    public String getProfileImage() {
+    public ImageModel getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(String profileImage) {
+    public void setProfileImage(ImageModel profileImage) {
         this.profileImage = profileImage;
     }
 
@@ -300,7 +310,7 @@ public class Author {
         private List<Post> posts;
         private List<Comment> comments;
         private List<Like> likes;
-        private String profileImage;
+        private ImageModel profileImage;
         private Set<Role> roles;
         private LocalDateTime createDateTime;
         private LocalDateTime updateDateTime;
@@ -373,7 +383,7 @@ public class Author {
             return this;
         }
 
-        public Builder profileImage(String val) {
+        public Builder profileImage(ImageModel val) {
             profileImage = val;
             return this;
         }

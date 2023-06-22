@@ -1,14 +1,8 @@
 package com.serbest.magazine.backend.service;
 
-import org.springframework.core.io.Resource;
-
-import java.io.IOException;
-import java.io.InputStream;
+import com.serbest.magazine.backend.entity.ImageModel;
 
 
 public interface ImageModelService {
-    void init();
-    Resource load(String filename);
-
-    void upload(InputStream inputStream,String filename);
+    ImageModel findById(String id);
 }

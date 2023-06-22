@@ -18,7 +18,8 @@ public class CommentResponseDTO {
     private String content;
     private String postId;
     private String username;
-    private String userImage;
+    private UUID userImageId;
+    private String userImageType;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
 }

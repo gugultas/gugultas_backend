@@ -85,15 +85,12 @@ public class PostServiceImpl implements PostService {
         }
 
         Post post = null;
-        MultipartFile file = requestDTO.getImage();
-        String filename = UploadImage.changeNameWithTimeStamp(file.getOriginalFilename());
+
         try {
-            imageModelService.upload(file.getInputStream(), filename);
             post = postMapper.postRequestDTOToPost(requestDTO);
             post.setAuthor(user);
             post.setCategory(category);
             post.setSubCategory(subCategory);
-            post.setPostImage(filename);
 
             return postMapper.postToPostCreateResponseDTO(postRepository.save(post));
         } catch (IOException e) {
@@ -132,15 +129,11 @@ public class PostServiceImpl implements PostService {
         }
 
         Post post = null;
-        MultipartFile file = requestDTO.getImage();
-        String filename = UploadImage.changeNameWithTimeStamp(file.getOriginalFilename());
         try {
-            imageModelService.upload(file.getInputStream(), filename);
             post = postMapper.postCreateEditorRequestDTOToPost(requestDTO);
             post.setAuthor(user);
             post.setCategory(category);
             post.setSubCategory(subCategory);
-            post.setPostImage(filename);
 
             return postMapper.postToPostCreateResponseDTO(postRepository.save(post));
         } catch (IOException e) {
@@ -251,14 +244,9 @@ public class PostServiceImpl implements PostService {
                     "The Sub-Category is not belong to selected category.");
         }
 
-        String filename = null;
-        if (!requestDTO.getImageProtect()) {
-            filename = UploadImage.changeNameWithTimeStamp(requestDTO.getImage().getOriginalFilename());
-        }
         try {
             if (!requestDTO.getImageProtect()) {
-                post.setPostImage(filename);
-                imageModelService.upload(requestDTO.getImage().getInputStream(), filename);
+                post.setPostImage(UploadImage.uploadImage(requestDTO.getImage()));
             }
             post.setCategory(category);
             post.setSubCategory(subCategory);
@@ -295,15 +283,9 @@ public class PostServiceImpl implements PostService {
                     "The Sub-Category is not belong to selected category.");
         }
 
-        String filename = null;
-        if (!requestDTO.getImageProtect()) {
-            filename = UploadImage.changeNameWithTimeStamp(requestDTO.getImage().getOriginalFilename());
-        }
-
         try {
             if (!requestDTO.getImageProtect()) {
-                post.setPostImage(filename);
-                imageModelService.upload(requestDTO.getImage().getInputStream(), filename);
+                post.setPostImage(UploadImage.uploadImage(requestDTO.getImage()));
             }
             post.setCategory(category);
             post.setSubCategory(subCategory);

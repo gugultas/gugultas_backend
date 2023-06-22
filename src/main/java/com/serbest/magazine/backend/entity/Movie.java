@@ -1,7 +1,7 @@
 package com.serbest.magazine.backend.entity;
 
 import com.serbest.magazine.backend.common.entity.Masterpiece;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,7 +31,7 @@ public class Movie extends Masterpiece {
         private String title;
         private String owner;
         private String info;
-        private String image;
+        private ImageModel image;
         private String showLink;
         private String showLink2;
         private String marketLink;
@@ -65,7 +65,7 @@ public class Movie extends Masterpiece {
             return this;
         }
 
-        public Builder image(String val) {
+        public Builder image(ImageModel val) {
             image = val;
             return this;
         }

@@ -1,9 +1,12 @@
 package com.serbest.magazine.backend.mapper;
 
 import com.serbest.magazine.backend.dto.post.*;
+import com.serbest.magazine.backend.entity.ImageModel;
 import com.serbest.magazine.backend.entity.Post;
 
+import com.serbest.magazine.backend.util.UploadImage;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -18,9 +21,10 @@ public class PostMapper {
                 .content(post.getContent())
                 .category(post.getCategory().getName())
                 .subCategory(post.getSubCategory().getName())
-                .image(post.getPostImage())
+                .image(post.getPostImage().getId())
                 .username(post.getAuthor().getUsername())
-                .profileImage(post.getAuthor().getProfileImage())
+                .profileImageId(post.getAuthor().getProfileImage().getId())
+                .profileImageType(post.getAuthor().getProfileImage().getType())
                 .comments(post.getComments().stream().count())
                 .createDateTime(post.getCreateDateTime())
                 .updateDateTime(post.getUpdateDateTime())
@@ -33,6 +37,7 @@ public class PostMapper {
                 .title(postRequestDTO.getTitle())
                 .subtitle(postRequestDTO.getSubtitle())
                 .content(postRequestDTO.getContent())
+                .postImage(UploadImage.uploadImage(postRequestDTO.getImage()))
                 .active(true)
                 .build();
     }
@@ -43,6 +48,7 @@ public class PostMapper {
                 .title(postRequestDTO.getTitle())
                 .subtitle(postRequestDTO.getSubtitle())
                 .content(postRequestDTO.getContent())
+                .postImage(UploadImage.uploadImage(postRequestDTO.getImage()))
                 .active(true)
                 .build();
     }
@@ -60,7 +66,8 @@ public class PostMapper {
 
     public FirstFivePostsListDTO postToFirstFivePostsListDTO(Post post) {
         return new FirstFivePostsListDTO(
-                post.getPostId(), post.getPostImage(), post.getTitle(), post.getAuthor().getProfileImage());
+                post.getPostId(), post.getPostImage().getId(), post.getTitle(), post.getAuthor().getProfileImage().getId()
+                , post.getAuthor().getProfileImage().getType());
     }
 
     public MainPagePostsListDTO postToMainPagePostsListDTO(Post post) {
@@ -70,7 +77,7 @@ public class PostMapper {
                 .category(post.getCategory().getName())
                 .subCategory(post.getSubCategory().getName())
                 .username(post.getAuthor().getUsername())
-                .image(post.getPostImage())
+                .image(post.getPostImage().getId())
                 .comments(post.getComments().stream().count())
                 .createDateTime(post.getCreateDateTime())
                 .build();
@@ -84,5 +91,6 @@ public class PostMapper {
                 .username(post.getAuthor().getUsername())
                 .build();
     }
+
 
 }

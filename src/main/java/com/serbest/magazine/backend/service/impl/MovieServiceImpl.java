@@ -35,12 +35,8 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MessageResponseDTO create(MasterpieceRequestDTO requestDTO) {
         Movie movie = null;
-        MultipartFile file = requestDTO.getImage();
-        String filename = UploadImage.changeNameWithTimeStamp(file.getOriginalFilename());
         try {
-            imageModelService.upload(file.getInputStream(), filename);
             movie = masterpieceMapper.masterpieceRequestDTOToMovie(requestDTO);
-            movie.setImage(filename);
 
             Movie savedMovie = movieRepository.save(movie);
 
@@ -72,15 +68,9 @@ public class MovieServiceImpl implements MovieService {
                 () -> new ResourceNotFoundException("Movie", "id", id)
         );
 
-        String filename = null;
-        if (!requestDTO.getImageProtect()) {
-            filename = UploadImage.changeNameWithTimeStamp(requestDTO.getImage().getOriginalFilename());
-        }
-
         try {
             if (!requestDTO.getImageProtect()) {
-                movie.setImage(filename);
-                imageModelService.upload(requestDTO.getImage().getInputStream(), filename);
+                movie.setImage(UploadImage.uploadImage(requestDTO.getImage()));
             }
             movie.setTitle(requestDTO.getTitle());
             movie.setOwner(requestDTO.getOwner());

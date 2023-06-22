@@ -25,7 +25,7 @@ public class AuthorResponseDTO {
     private String instagram;
     private String youtube;
     private String blog;
-    private String image;
+    private UUID image;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
 }

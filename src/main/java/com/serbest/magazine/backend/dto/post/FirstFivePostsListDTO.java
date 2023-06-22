@@ -11,7 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FirstFivePostsListDTO {
     private UUID id;
-    private String image;
+    private UUID image;
     private String title;
-    private String avatar;
+    private UUID avatarId;
+    private String avatarType;
 }

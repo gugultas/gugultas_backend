@@ -35,12 +35,10 @@ public class PictureServiceImpl implements PictureService {
     @Override
     public MessageResponseDTO create(MasterpieceRequestDTO requestDTO) {
         Picture picture = null;
-        MultipartFile file = requestDTO.getImage();
-        String filename = UploadImage.changeNameWithTimeStamp(file.getOriginalFilename());
+
         try {
-            imageModelService.upload(file.getInputStream(), filename);
+
             picture = masterpieceMapper.masterpieceRequestDTOToPicture(requestDTO);
-            picture.setImage(filename);
 
             Picture savedPicture = pictureRepository.save(picture);
 
@@ -73,15 +71,9 @@ public class PictureServiceImpl implements PictureService {
                 () -> new ResourceNotFoundException("picture", "id", id)
         );
 
-        String filename = null;
-        if (!requestDTO.getImageProtect()) {
-            filename = UploadImage.changeNameWithTimeStamp(requestDTO.getImage().getOriginalFilename());
-        }
-
         try {
             if (!requestDTO.getImageProtect()) {
-                picture.setImage(filename);
-                imageModelService.upload(requestDTO.getImage().getInputStream(), filename);
+                picture.setImage(UploadImage.uploadImage(requestDTO.getImage()));
             }
             picture.setTitle(requestDTO.getTitle());
             picture.setOwner(requestDTO.getOwner());

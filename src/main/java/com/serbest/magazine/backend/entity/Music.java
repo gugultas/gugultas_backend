@@ -31,7 +31,7 @@ public class Music extends Masterpiece {
         private String title;
         private String owner;
         private String info;
-        private String image;
+        private ImageModel image;
         private String showLink;
         private String showLink2;
         private String marketLink;
@@ -65,7 +65,7 @@ public class Music extends Masterpiece {
             return this;
         }
 
-        public Builder image(String val) {
+        public Builder image(ImageModel val) {
             image = val;
             return this;
         }

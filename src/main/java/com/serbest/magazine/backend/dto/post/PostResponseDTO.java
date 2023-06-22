@@ -20,8 +20,9 @@ public class PostResponseDTO {
     private String category;
     private String subCategory;
     private String username;
-    private String profileImage;
-    private String image;
+    private UUID profileImageId;
+    private String profileImageType;
+    private UUID image;
     private Long comments;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;

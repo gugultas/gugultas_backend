@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import java.util.List;
 public class RefreshTokenResponseDTO {
     private String accessToken;
     private String username;
-    private String image;
+    private UUID image;
     private List<String> roles;
     private String message;
 }

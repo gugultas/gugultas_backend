@@ -28,7 +28,7 @@ public class MasterpieceResponseDTO {
 
     private String marketLink;
 
-    private String image;
+    private UUID image;
 
     private LocalDateTime createDateTime;
 

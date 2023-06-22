@@ -13,6 +13,9 @@ public class ImageModel {
     private UUID id;
     private String name;
     private String type;
+
+    // @Formula("(select count(id) from image_model")
+    // private int isImageExist;
     @Lob
     @Column(name = "pic_byte")
     private byte[] picByte;

@@ -42,7 +42,16 @@ public class Post {
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    private String postImage;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "post_images",
+            joinColumns = {
+                    @JoinColumn(name = "post_id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "image_id")
+            }
+    )
+    private ImageModel postImage;
 
     @CreationTimestamp
     private LocalDateTime createDateTime;
@@ -52,7 +61,7 @@ public class Post {
 
 
     public Post(UUID postId, String title, String subtitle, String content, Boolean active, Category category,
-                SubCategory subCategory, Author author, String postImage, LocalDateTime createDateTime, LocalDateTime updateDateTime) {
+                SubCategory subCategory, Author author, ImageModel postImage, LocalDateTime createDateTime, LocalDateTime updateDateTime) {
         this.postId = postId;
         this.title = title;
         this.subtitle = subtitle;
@@ -162,11 +171,14 @@ public class Post {
         this.comments = comments;
     }
 
-    public String getPostImage() {
+    public ImageModel getPostImage() {
+        if (postImage == null){
+            return new ImageModel();
+        };
         return postImage;
     }
 
-    public void setPostImage(String postImage) {
+    public void setPostImage(ImageModel postImage) {
         this.postImage = postImage;
     }
 
@@ -195,7 +207,7 @@ public class Post {
         private Category category;
         private SubCategory subCategory;
         private Author author;
-        private String postImage;
+        private ImageModel postImage;
 
         private Builder() {
         }
@@ -244,7 +256,7 @@ public class Post {
             return this;
         }
 
-        public Builder postImage(String val) {
+        public Builder postImage(ImageModel val) {
             postImage = val;
             return this;
         }

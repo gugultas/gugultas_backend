@@ -1,5 +1,6 @@
 package com.serbest.magazine.backend.common.entity;
 
+import com.serbest.magazine.backend.entity.ImageModel;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,7 +21,16 @@ public abstract class Masterpiece {
     @Lob
     private String info;
 
-    private String image;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "masterpiece_images",
+            joinColumns = {
+                    @JoinColumn(name = "masterpiece_id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "image_id")
+            }
+    )
+    private ImageModel image;
 
     private String showLink;
 
@@ -37,7 +47,8 @@ public abstract class Masterpiece {
     public Masterpiece() {
     }
 
-    public Masterpiece(String title, String owner, String info, String image, String showLink, String showLink2, String marketLink) {
+    public Masterpiece(String title, String owner, String info, ImageModel image, String showLink, String showLink2,
+                       String marketLink) {
         this.title = title;
         this.owner = owner;
         this.info = info;
@@ -47,7 +58,7 @@ public abstract class Masterpiece {
         this.marketLink = marketLink;
     }
 
-    public Masterpiece(UUID id, String title, String owner, String info, String image, String showLink, String showLink2, String marketLink, LocalDateTime createDateTime, LocalDateTime updateDateTime) {
+    public Masterpiece(UUID id, String title, String owner, String info, ImageModel image, String showLink, String showLink2, String marketLink, LocalDateTime createDateTime, LocalDateTime updateDateTime) {
         this.id = id;
         this.title = title;
         this.owner = owner;
@@ -93,11 +104,14 @@ public abstract class Masterpiece {
         this.info = info;
     }
 
-    public String getImage() {
+    public ImageModel getImage() {
+        if (image == null){
+            return new ImageModel();
+        };
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(ImageModel image) {
         this.image = image;
     }
 

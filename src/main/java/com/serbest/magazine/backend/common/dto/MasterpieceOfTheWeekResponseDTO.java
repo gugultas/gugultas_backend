@@ -32,7 +32,7 @@ public class MasterpieceOfTheWeekResponseDTO {
 
     private String marketLink;
 
-    private String image;
+    private UUID image;
 
     private LocalDateTime createDateTime;
 

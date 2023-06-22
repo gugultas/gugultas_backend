@@ -36,12 +36,8 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public MessageResponseDTO create(MasterpieceRequestDTO requestDTO) {
         Music music = null;
-        MultipartFile file = requestDTO.getImage();
-        String filename = UploadImage.changeNameWithTimeStamp(file.getOriginalFilename());
         try {
-            imageModelService.upload(file.getInputStream(), filename);
             music = masterpieceMapper.masterpieceRequestDTOToMusic(requestDTO);
-            music.setImage(filename);
 
             Music savedMusic = musicRepository.save(music);
 
@@ -75,15 +71,9 @@ public class MusicServiceImpl implements MusicService {
                 () -> new ResourceNotFoundException("Music", "id", id)
         );
 
-        String filename = null;
-        if (!requestDTO.getImageProtect()) {
-            filename = UploadImage.changeNameWithTimeStamp(requestDTO.getImage().getOriginalFilename());
-        }
-
         try {
             if (!requestDTO.getImageProtect()) {
-                music.setImage(filename);
-                imageModelService.upload(requestDTO.getImage().getInputStream(), filename);
+                music.setImage(UploadImage.uploadImage(requestDTO.getImage()));
             }
             music.setTitle(requestDTO.getTitle());
             music.setOwner(requestDTO.getOwner());

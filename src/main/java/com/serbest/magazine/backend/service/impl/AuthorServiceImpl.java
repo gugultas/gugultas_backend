@@ -88,14 +88,6 @@ public class AuthorServiceImpl implements AuthorService {
         validateAndSanitizeFieldName("Author Id", userId);
         Author author = getAuthor(userId);
 
-        String filename = null;
-        if (!requestDTO.getImageProtect()) {
-            if (requestDTO.getImage() == null) {
-                author.setProfileImage("");
-            } else {
-                filename = UploadImage.changeNameWithTimeStamp(requestDTO.getImage().getOriginalFilename());
-            }
-        }
 
         author.setFirstName(requestDTO.getFirstName());
         author.setLastName(requestDTO.getLastName());
@@ -105,14 +97,11 @@ public class AuthorServiceImpl implements AuthorService {
         author.setTwitter(requestDTO.getTwitter());
         author.setYoutube(requestDTO.getYoutube());
         author.setBlog(requestDTO.getBlog());
+        if (!requestDTO.getImageProtect()) {
+            author.setProfileImage(UploadImage.uploadImage(requestDTO.getImage()));
+        }
 
         try {
-            if (!requestDTO.getImageProtect()) {
-                if (requestDTO.getImage() != null) {
-                    author.setProfileImage(filename);
-                    imageModelService.upload(requestDTO.getImage().getInputStream(), filename);
-                }
-            }
             return userMapper.authorToAuthorResponseDTO(authorRepository.save(author));
         } catch (Exception e) {
             throw new CustomApplicationException(HttpStatus.BAD_REQUEST, e.getMessage());

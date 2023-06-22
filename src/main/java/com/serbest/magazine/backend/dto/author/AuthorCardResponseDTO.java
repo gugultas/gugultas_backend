@@ -17,6 +17,6 @@ public class AuthorCardResponseDTO {
     private String firstName;
     private String lastName;
     private String description;
-    private String image;
-    private String imageName;
+    private UUID imageId;
+    private String imageType;
 }
