@@ -24,12 +24,12 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private String image;
+    private UUID image;
 
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(UUID id, String username, String email, String password,
-                           String image, Collection<? extends GrantedAuthority> authorities) {
+                           UUID image, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -48,7 +48,7 @@ public class UserDetailsImpl implements UserDetails {
                 author.getUsername(),
                 author.getEmail(),
                 author.getPassword(),
-                author.getProfileImage(),
+                author.getProfileImage().getId(),
                 authorities);
     }
 
@@ -65,7 +65,7 @@ public class UserDetailsImpl implements UserDetails {
         return email;
     }
 
-    public String getImage() {
+    public UUID getImage() {
         return image;
     }
 
