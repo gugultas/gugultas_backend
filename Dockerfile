@@ -7,6 +7,7 @@ COPY . .
 
 RUN mvn clean package -DskipTests
 
+
 #
 # Package stage
 #
