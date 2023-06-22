@@ -3,6 +3,7 @@ package com.serbest.magazine.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.serbest.magazine.backend.dto.post.*;
+import com.serbest.magazine.backend.entity.ImageModel;
 import com.serbest.magazine.backend.service.PostService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -250,7 +251,7 @@ class PostControllerTest {
     public void RA_test_getFirstFivePosts_shouldAllowPostFetchingWithAuthentication() {
         UUID postId = UUID.randomUUID();
         FirstFivePostsListDTO responseDTO =
-                new FirstFivePostsListDTO(postId, "file.png", "Test Title","image.png");
+                new FirstFivePostsListDTO(postId, UUID.randomUUID(), "Test Title",UUID.randomUUID(), "/png");
 
         Mockito.when(postService.getFirstFivePosts()).thenReturn(List.of(responseDTO));
 
@@ -273,7 +274,7 @@ class PostControllerTest {
                 .id(postId)
                 .title("Test Title")
                 .category("Politics")
-                .image("img.png")
+                .image(UUID.randomUUID())
                 .createDateTime(LocalDateTime.now())
                 .username("Ensar")
                 .build();
@@ -299,7 +300,7 @@ class PostControllerTest {
                 .id(postId)
                 .title("Test Title")
                 .category("Politics")
-                .image("img.png")
+                .image(UUID.randomUUID())
                 .createDateTime(LocalDateTime.now())
                 .username("Ensar")
                 .build();

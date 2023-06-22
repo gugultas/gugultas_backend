@@ -1,10 +1,7 @@
 package com.serbest.magazine.backend.service.impl;
 
 import com.serbest.magazine.backend.dto.post.*;
-import com.serbest.magazine.backend.entity.Author;
-import com.serbest.magazine.backend.entity.Category;
-import com.serbest.magazine.backend.entity.Post;
-import com.serbest.magazine.backend.entity.SubCategory;
+import com.serbest.magazine.backend.entity.*;
 import com.serbest.magazine.backend.exception.CustomApplicationException;
 import com.serbest.magazine.backend.exception.ResourceNotFoundException;
 import com.serbest.magazine.backend.repository.AuthorRepository;
@@ -97,7 +94,7 @@ class PostServiceImplIntegrationTest {
                 .subCategory(subCategory)
                 .author(author)
                 .active(false)
-                .postImage("file.png")
+                .postImage(new ImageModel())
                 .build());
 
         Post post = postRepository.save(Post.Builder.newBuilder()
@@ -108,7 +105,7 @@ class PostServiceImplIntegrationTest {
                 .subCategory(subCategory)
                 .author(author)
                 .active(true)
-                .postImage("file.png")
+                .postImage(new ImageModel())
                 .build());
 
         this.postId = post.getPostId();
@@ -684,7 +681,7 @@ class PostServiceImplIntegrationTest {
                     .subCategory(subCategory)
                     .author(author)
                     .active(true)
-                    .postImage("file.png")
+                    .postImage(new ImageModel())
                     .build();
 
             postRepository.save(testPost);
