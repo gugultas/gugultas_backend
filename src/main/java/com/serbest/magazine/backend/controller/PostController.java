@@ -108,6 +108,11 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostsBySubCategory(subCategory));
     }
 
+    @GetMapping("/getLastFivePostsByAuthor/{username}")
+    public ResponseEntity<List<AuthorsLastFivePosts>> getLastFivePostsByAuthor(@PathVariable String username){
+        return ResponseEntity.ok(postService.getLastFivePostsOfAuthor(username));
+    }
+
     @GetMapping("/randomThree")
     public ResponseEntity<List<PostResponseDTO>> getThreeByRandomPosts(){
         return ResponseEntity.ok(postService.getRandomThreePost());

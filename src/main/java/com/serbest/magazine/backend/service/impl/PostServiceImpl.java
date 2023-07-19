@@ -347,6 +347,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<AuthorsLastFivePosts> getLastFivePostsOfAuthor(String username) {
+        userRepository.findByUsername(username).orElseThrow(
+                () -> new ResourceNotFoundException("Author", "username", username)
+        );
+
+        List<Post> posts = postRepository.findFiveByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(username);
+
+        return posts
+                .stream()
+                .map(postMapper::postToAuthorsLastFivePosts)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
     public Integer countsByCategoryName(String categoryName) {
         categoryRepository.findByName(categoryName).orElseThrow(
                 () -> new ResourceNotFoundException("Category", "name", categoryName)

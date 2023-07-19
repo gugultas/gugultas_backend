@@ -211,23 +211,6 @@ public class AuthorServiceImpl implements AuthorService {
                 () -> new ResourceNotFoundException("Author", "username", username)
         );
 
-        Role authorRole = roleRepository.findByName("ROLE_AUTHOR").orElseThrow(
-                () -> new ResourceNotFoundException("Role", "name", "ROLE_AUTHOR")
-        );
-
-        List<Role> roles;
-
-        if (author.getRoles() == null || author.getRoles().isEmpty()) {
-            throw new CustomApplicationException(HttpStatus.BAD_REQUEST, "User has no Role.");
-        }
-
-        roles = author.getRoles()
-                .stream()
-                .filter(role -> role.getName().equals(authorRole.getName())).collect(Collectors.toList());
-
-        if (!roles.get(0).getName().equals(authorRole.getName())) {
-            throw new CustomApplicationException(HttpStatus.BAD_REQUEST, "Sadece yazarların profil sayfası olabilir.");
-        }
         return userMapper.authorToAuthorResponseDTO(author);
     }
 

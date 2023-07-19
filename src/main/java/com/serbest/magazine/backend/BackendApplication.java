@@ -1,7 +1,6 @@
 package com.serbest.magazine.backend;
 
 import com.serbest.magazine.backend.service.ImageModelService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

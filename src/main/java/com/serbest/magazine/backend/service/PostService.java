@@ -25,6 +25,7 @@ public interface PostService {
     List<PostResponseDTO> getRandomThreePost();
     List<PostResponseDTO> getPostsByCategory(String categoryName);
     List<PostResponseDTO> getPostsBySubCategory(String subCategoryId);
+    List<AuthorsLastFivePosts> getLastFivePostsOfAuthor(String username);
     List<PostResponseDTO> findByUsername(String userId);
     Integer countsByCategoryName(String categoryName);
 }

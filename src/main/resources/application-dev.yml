@@ -2,9 +2,9 @@ spring:
   datasource:
     hikari:
       auto-commit: false
-    url: jdbc:postgresql://localhost:5432/magazine
+    url: jdbc:postgresql://postgres:5432/postgres
     username: postgres
-    password: "****"
+    password: postgres
   jpa:
     properties:
       hibernate:
@@ -12,7 +12,7 @@ spring:
           lob:
             non_contextual_creation: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   servlet:
     multipart:
       enabled: true

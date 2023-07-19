@@ -50,6 +50,9 @@ public class UserMapper {
                 .facebook(author.getFacebook())
                 .blog(author.getBlog())
                 .twitter(author.getTwitter())
+                .roles(
+                        author.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())
+                )
                 .youtube(author.getYoutube())
                 .instagram(author.getInstagram())
                 .createDateTime(author.getCreateDateTime())

@@ -83,6 +83,14 @@ public class PostMapper {
                 .build();
     }
 
+    public AuthorsLastFivePosts postToAuthorsLastFivePosts(Post post){
+        return AuthorsLastFivePosts.builder()
+                .postId(post.getPostId())
+                .title(post.getTitle())
+                .createdTime(post.getCreateDateTime())
+                .build();
+    }
+
     public DeactivatedPostApiResponseDTO postToDeactivatedPostApiResponseDTO(Post post) {
         return DeactivatedPostApiResponseDTO.builder()
                 .id(post.getPostId())
