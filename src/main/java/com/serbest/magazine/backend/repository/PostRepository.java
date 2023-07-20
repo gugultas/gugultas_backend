@@ -28,7 +28,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
     List<Post> findAllByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(String username);
 
-    List<Post> findFiveByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(String username);
+    List<Post> findTop5ByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(String username);
 
     List<Post> findAllByCategoryNameAndActiveTrueOrderByCreateDateTimeDesc(String categoryName);
 

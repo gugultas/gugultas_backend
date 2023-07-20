@@ -352,7 +352,7 @@ public class PostServiceImpl implements PostService {
                 () -> new ResourceNotFoundException("Author", "username", username)
         );
 
-        List<Post> posts = postRepository.findFiveByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(username);
+        List<Post> posts = postRepository.findTop5ByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(username);
 
         return posts
                 .stream()
