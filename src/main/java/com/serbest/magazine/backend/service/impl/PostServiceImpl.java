@@ -1,19 +1,14 @@
 package com.serbest.magazine.backend.service.impl;
 
+import com.serbest.magazine.backend.common.validation.StringValidationCommon;
+import com.serbest.magazine.backend.entity.*;
+import com.serbest.magazine.backend.repository.*;
 import com.serbest.magazine.backend.service.ImageModelService;
 import com.serbest.magazine.backend.service.PostService;
 import com.serbest.magazine.backend.dto.post.*;
-import com.serbest.magazine.backend.entity.Author;
-import com.serbest.magazine.backend.entity.Category;
-import com.serbest.magazine.backend.entity.Post;
-import com.serbest.magazine.backend.entity.SubCategory;
 import com.serbest.magazine.backend.exception.CustomApplicationException;
 import com.serbest.magazine.backend.exception.ResourceNotFoundException;
 import com.serbest.magazine.backend.mapper.PostMapper;
-import com.serbest.magazine.backend.repository.AuthorRepository;
-import com.serbest.magazine.backend.repository.CategoryRepository;
-import com.serbest.magazine.backend.repository.PostRepository;
-import com.serbest.magazine.backend.repository.SubCategoryRepository;
 import com.serbest.magazine.backend.security.CheckAuthorization;
 import com.serbest.magazine.backend.util.UploadImage;
 
@@ -22,11 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,16 +34,20 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
     private final AuthorRepository userRepository;
+    private final PlaylistRepository playlistRepository;
     private final ImageModelService imageModelService;
 
     public PostServiceImpl(CheckAuthorization checkAuthorization, CategoryRepository categoryRepository,
-                           SubCategoryRepository subCategoryRepository, PostRepository postRepository, PostMapper postMapper, AuthorRepository userRepository, ImageModelService imageModelService) {
+                           SubCategoryRepository subCategoryRepository, PostRepository postRepository,
+                           PostMapper postMapper, AuthorRepository userRepository, PlaylistRepository playlistRepository,
+                           ImageModelService imageModelService) {
         this.checkAuthorization = checkAuthorization;
         this.categoryRepository = categoryRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.postRepository = postRepository;
         this.postMapper = postMapper;
         this.userRepository = userRepository;
+        this.playlistRepository = playlistRepository;
         this.imageModelService = imageModelService;
     }
 
@@ -58,6 +57,8 @@ public class PostServiceImpl implements PostService {
         validateAndSanitizeFieldName("Content", requestDTO.getContent());
         validateAndSanitizeFieldName("Category", requestDTO.getCategory());
         validateAndSanitizeFieldName("SubCategory", requestDTO.getSubCategory());
+
+        StringValidationCommon.common_validateStringLength(1, 60, requestDTO.getTitle());
 
         SecurityContext context = SecurityContextHolder.getContext();
         String usernameOrEmail = context.getAuthentication().getName();
@@ -105,6 +106,8 @@ public class PostServiceImpl implements PostService {
         validateAndSanitizeFieldName("Category", requestDTO.getCategory());
         validateAndSanitizeFieldName("Sub-Category", requestDTO.getSubCategory());
         validateAndSanitizeFieldName("Author", requestDTO.getAuthor());
+
+        StringValidationCommon.common_validateStringLength(1, 60, requestDTO.getTitle());
 
         Author user = userRepository.findByUsername(requestDTO.getAuthor()).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "username", requestDTO.getAuthor())
@@ -229,6 +232,9 @@ public class PostServiceImpl implements PostService {
         validateAndSanitizeFieldName("Content", requestDTO.getContent());
         validateAndSanitizeFieldName("Category", requestDTO.getCategory());
         validateAndSanitizeFieldName("Sub-Category", requestDTO.getSubCategory());
+
+        StringValidationCommon.common_validateStringLength(1, 60, requestDTO.getTitle());
+
         Post post = getPost(id);
 
         Category category = categoryRepository.findByName(requestDTO.getCategory()).orElseThrow(
@@ -265,6 +271,8 @@ public class PostServiceImpl implements PostService {
         validateAndSanitizeFieldName("Content", requestDTO.getContent());
         validateAndSanitizeFieldName("Category", requestDTO.getCategory());
         validateAndSanitizeFieldName("Sub-Category", requestDTO.getSubCategory());
+
+        StringValidationCommon.common_validateStringLength(1, 60, requestDTO.getTitle());
 
         Post post = postRepository.findById(UUID.fromString(id)).orElseThrow(
                 () -> new ResourceNotFoundException("Post", "id", id)
@@ -334,6 +342,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostResponseDTO> searchPosts(String keyword) {
+        return postRepository
+                .findByTitleContainingIgnoreCase(keyword)
+                .stream()
+                .map(postMapper::postToPostResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<PostResponseDTO> findByUsername(String username) {
         userRepository.findByUsername(username).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "username", username)
@@ -359,6 +376,38 @@ public class PostServiceImpl implements PostService {
                 .map(postMapper::postToAuthorsLastFivePosts)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<PlaylistPostListResponseDTO> getPostsByPlaylist(String playlistId) {
+        List<Playlist> playlists = new ArrayList<>();
+
+        Playlist playlist = playlistRepository.findById(UUID.fromString(playlistId)).orElseThrow(
+                () -> new ResourceNotFoundException("Playlist","id",playlistId)
+        );
+
+        playlists.add(playlist);
+
+        List<Post> posts = postRepository.findByPlaylistsInOrderByCreateDateTimeDesc(playlists);
+
+        return posts
+                .stream()
+                .map(postMapper::postToPlaylistPostListResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostsOfAuthorForPlaylistResponseDTO> getPostsOfAuthorForPlaylist(String username,String playlistId) {
+        Playlist playlist = playlistRepository.findById(UUID.fromString(playlistId)).orElseThrow(
+                () -> new ResourceNotFoundException("Playlist","id",playlistId)
+        );
+
+        return postRepository
+                .findAllByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(username)
+                .stream()
+                .filter(post -> !post.getPlaylists().contains(playlist))
+                .map(post -> new PostsOfAuthorForPlaylistResponseDTO(post.getPostId(),post.getTitle()))
+                .collect(Collectors.toList());
     }
 
     @Override

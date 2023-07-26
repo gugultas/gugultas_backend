@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostUpdateRequestDTO {
 
     @NotBlank(message = "Please provide a title.")
-    @Size(max = 50,message = "Title size cannot be more than 50 characters.")
+    @Size(max = 60,message = "Title size cannot be more than 60 characters.")
     private String title;
 
     private String subtitle;

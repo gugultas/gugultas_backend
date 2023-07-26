@@ -1,5 +1,6 @@
 package com.serbest.magazine.backend.repository;
 
+import com.serbest.magazine.backend.entity.Playlist;
 import com.serbest.magazine.backend.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,7 +33,11 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
     List<Post> findAllByCategoryNameAndActiveTrueOrderByCreateDateTimeDesc(String categoryName);
 
+    List<Post> findByPlaylistsInOrderByCreateDateTimeDesc(List<Playlist> playlists);
+
     List<Post> findAllBySubCategoryIdAndActiveTrueOrderByCreateDateTimeDesc(UUID categoryId);
+
+    List<Post> findByTitleContainingIgnoreCase(String title);
 
     Integer countByCategoryNameAndActiveTrue(String categoryName);
 

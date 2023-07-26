@@ -91,6 +91,24 @@ public class PostMapper {
                 .build();
     }
 
+    public PlaylistPostListResponseDTO postToPlaylistPostListResponseDTO(Post post){
+        return PlaylistPostListResponseDTO.builder()
+                .id(post.getPostId())
+                .title(post.getTitle())
+                .subtitle(post.getSubtitle())
+                .content(post.getContent())
+                .category(post.getCategory().getName())
+                .subCategory(post.getSubCategory().getName())
+                .image(post.getPostImage().getId())
+                .username(post.getAuthor().getUsername())
+                .profileImageId(post.getAuthor().getProfileImage().getId())
+                .profileImageType(post.getAuthor().getProfileImage().getType())
+                .comments(post.getComments().stream().count())
+                .createDateTime(post.getCreateDateTime())
+                .updateDateTime(post.getUpdateDateTime())
+                .build();
+    }
+
     public DeactivatedPostApiResponseDTO postToDeactivatedPostApiResponseDTO(Post post) {
         return DeactivatedPostApiResponseDTO.builder()
                 .id(post.getPostId())

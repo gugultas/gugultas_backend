@@ -113,6 +113,22 @@ public class PostController {
         return ResponseEntity.ok(postService.getLastFivePostsOfAuthor(username));
     }
 
+    @GetMapping("/getPostsByPlaylist/{id}")
+    public ResponseEntity<List<PlaylistPostListResponseDTO>> getPostsByPlaylist(@PathVariable String id){
+        return ResponseEntity.ok(postService.getPostsByPlaylist(id));
+    }
+
+    @GetMapping("/getPostsOfAuthorForPlaylist/{username}/{playlistId}")
+    public ResponseEntity<List<PostsOfAuthorForPlaylistResponseDTO>>
+        getPostsOfAuthorForPlaylist(@PathVariable String username , @PathVariable String playlistId){
+        return ResponseEntity.ok(postService.getPostsOfAuthorForPlaylist(username,playlistId));
+    }
+
+    @GetMapping("/searchPosts/{title}")
+    public ResponseEntity<List<PostResponseDTO>> searchPosts(@PathVariable String title){
+        return ResponseEntity.ok(postService.searchPosts(title));
+    }
+
     @GetMapping("/randomThree")
     public ResponseEntity<List<PostResponseDTO>> getThreeByRandomPosts(){
         return ResponseEntity.ok(postService.getRandomThreePost());

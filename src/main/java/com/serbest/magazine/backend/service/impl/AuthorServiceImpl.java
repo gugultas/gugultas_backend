@@ -219,6 +219,9 @@ public class AuthorServiceImpl implements AuthorService {
         validateAndSanitizeFieldName("Author Id", userId);
 
         Author author = getAuthor(userId);
+        author.setUsername("Deleted User");
+        author.setFirstName("");
+        author.setLastName("");
         author.setActive(false);
         return userMapper.authorToAuthorResponseDTO(authorRepository.save(author));
     }
