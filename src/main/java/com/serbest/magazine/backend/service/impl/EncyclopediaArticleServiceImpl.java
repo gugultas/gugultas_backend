@@ -38,7 +38,8 @@ public class EncyclopediaArticleServiceImpl implements EncyclopediaArticleServic
 
         EncyclopediaArticle encyclopediaArticle = new EncyclopediaArticle(
                 encyclopediaArticleRequestDTO.getTitle(),
-                encyclopediaArticleRequestDTO.getContent());
+                encyclopediaArticleRequestDTO.getContent(),
+                encyclopediaArticleRequestDTO.getDescription());
 
         EncyclopediaArticle newEncyclopediaArticle = encyclopediaArticleRepository.save(encyclopediaArticle);
 
@@ -60,6 +61,7 @@ public class EncyclopediaArticleServiceImpl implements EncyclopediaArticleServic
 
         encyclopediaArticle.setTitle(updateRequestDTO.getTitle());
         encyclopediaArticle.setContent(updateRequestDTO.getContent());
+        encyclopediaArticle.setDescription(updateRequestDTO.getDescription());
 
         EncyclopediaArticle newEncyclopediaArticle = encyclopediaArticleRepository.save(encyclopediaArticle);
 

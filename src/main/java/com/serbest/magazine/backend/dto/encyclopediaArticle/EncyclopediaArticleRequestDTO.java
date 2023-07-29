@@ -17,4 +17,6 @@ public class EncyclopediaArticleRequestDTO {
 
     @NotBlank(message = "Lütfen geçerli bir içerik giriniz.")
     private String content;
+
+    private String description;
 }

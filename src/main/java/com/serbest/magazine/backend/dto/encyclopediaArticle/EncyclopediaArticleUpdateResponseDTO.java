@@ -17,6 +17,7 @@ public class EncyclopediaArticleUpdateResponseDTO {
     private UUID id;
     private String title;
     private String content;
+    private String description;
     private LocalDateTime createDateTime;
 
 }

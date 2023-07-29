@@ -14,6 +14,7 @@ public class EncyclopediaArticleMapper {
                 encyclopediaArticle.getId(),
                 encyclopediaArticle.getTitle(),
                 encyclopediaArticle.getContent(),
+                encyclopediaArticle.getDescription(),
                 encyclopediaArticle.getCreateDateTime());
     }
 
@@ -23,6 +24,7 @@ public class EncyclopediaArticleMapper {
                 encyclopediaArticle.getId(),
                 encyclopediaArticle.getTitle(),
                 encyclopediaArticle.getContent(),
+                encyclopediaArticle.getDescription(),
                 encyclopediaArticle.getCreateDateTime()
         );
     }
