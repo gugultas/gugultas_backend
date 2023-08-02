@@ -1,9 +1,6 @@
 package com.serbest.magazine.backend.service.impl;
 
-import com.serbest.magazine.backend.common.dto.MasterpieceOfTheWeekResponseDTO;
-import com.serbest.magazine.backend.common.dto.MasterpieceRequestDTO;
-import com.serbest.magazine.backend.common.dto.MasterpieceResponseDTO;
-import com.serbest.magazine.backend.common.dto.MasterpieceUpdateRequestDTO;
+import com.serbest.magazine.backend.common.dto.*;
 import com.serbest.magazine.backend.common.entity.Masterpiece;
 import com.serbest.magazine.backend.common.mapper.MasterpieceMapper;
 import com.serbest.magazine.backend.dto.general.MessageResponseDTO;
@@ -18,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MusicServiceImpl implements MusicService {
@@ -53,6 +52,15 @@ public class MusicServiceImpl implements MusicService {
     public MasterpieceOfTheWeekResponseDTO getMasterpieceOfTheWeek() {
         return masterpieceMapper
                 .masterpieceToMasterpieceOfTheWeekResponseDTO(musicRepository.findTopByOrderByCreateDateTimeDesc());
+    }
+
+    @Override
+    public List<MasterpieceListResponseDTO> getMasterpieces() {
+        return musicRepository
+                .findAllByOrderByCreateDateTimeDesc()
+                .stream()
+                .map(masterpieceMapper::masterpieceToMasterpieceListResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.serbest.magazine.backend.controller;
 
+import com.serbest.magazine.backend.dto.general.MessageResponseDTO;
 import com.serbest.magazine.backend.dto.post.*;
 import com.serbest.magazine.backend.service.PostService;
 
@@ -96,6 +97,12 @@ public class PostController {
     public ResponseEntity<PostResponseDTO> updatePostForEditor(@PathVariable String id,@Valid @ModelAttribute PostUpdateEditorRequestDTO requestDTO)
             throws IOException {
         return ResponseEntity.ok(postService.updatePostEditor(id,requestDTO));
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(value = "/administration/deletePost/{id}")
+    public ResponseEntity<MessageResponseDTO> deletePostForEditor(@PathVariable String id) {
+        return ResponseEntity.ok(postService.deletePost(id));
     }
 
     @GetMapping("/getPostByCategory/{category}")

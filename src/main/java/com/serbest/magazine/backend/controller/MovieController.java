@@ -1,9 +1,6 @@
 package com.serbest.magazine.backend.controller;
 
-import com.serbest.magazine.backend.common.dto.MasterpieceOfTheWeekResponseDTO;
-import com.serbest.magazine.backend.common.dto.MasterpieceRequestDTO;
-import com.serbest.magazine.backend.common.dto.MasterpieceResponseDTO;
-import com.serbest.magazine.backend.common.dto.MasterpieceUpdateRequestDTO;
+import com.serbest.magazine.backend.common.dto.*;
 import com.serbest.magazine.backend.dto.general.MessageResponseDTO;
 import com.serbest.magazine.backend.service.MovieService;
 import jakarta.validation.Valid;
@@ -11,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:3000", "https://gugultas.com"}, maxAge = 3600, allowCredentials = "true")
 @RestController
@@ -36,6 +35,11 @@ public class MovieController {
     @GetMapping(value = "/getMasterpieceById/{id}")
     public ResponseEntity<MasterpieceResponseDTO> getMasterpieceById(@PathVariable String id) {
         return ResponseEntity.ok(movieService.getMasterpieceById(id));
+    }
+
+    @GetMapping(value = "/getMasterpieces")
+    public ResponseEntity<List<MasterpieceListResponseDTO>> getMasterpieces() {
+        return ResponseEntity.ok(movieService.getMasterpieces());
     }
 
     @PutMapping(value = "/updateMasterpieceById/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

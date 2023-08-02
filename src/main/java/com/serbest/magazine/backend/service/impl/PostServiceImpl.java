@@ -1,6 +1,7 @@
 package com.serbest.magazine.backend.service.impl;
 
 import com.serbest.magazine.backend.common.validation.StringValidationCommon;
+import com.serbest.magazine.backend.dto.general.MessageResponseDTO;
 import com.serbest.magazine.backend.entity.*;
 import com.serbest.magazine.backend.repository.*;
 import com.serbest.magazine.backend.service.ImageModelService;
@@ -266,6 +267,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public MessageResponseDTO deletePost(String id) {
+        Post post = postRepository.findById(UUID.fromString(id)).orElseThrow(
+                () -> new ResourceNotFoundException("Post", "id", id)
+        );
+
+        postRepository.deleteById(post.getPostId());
+
+        return new MessageResponseDTO(post.getTitle() +  " başlıklı postunuz başırılı bir şekilde silinmiştir.");
+    }
+
+    @Override
     public PostResponseDTO updatePostEditor(String id, PostUpdateEditorRequestDTO requestDTO) {
         validateAndSanitizeFieldName("Title", requestDTO.getTitle());
         validateAndSanitizeFieldName("Content", requestDTO.getContent());
@@ -344,7 +356,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostResponseDTO> searchPosts(String keyword) {
         return postRepository
-                .findByTitleContainingIgnoreCase(keyword)
+                .findByActiveTrueAndTitleContainingIgnoreCase(keyword)
                 .stream()
                 .map(postMapper::postToPostResponseDTO)
                 .collect(Collectors.toList());

@@ -1,5 +1,6 @@
 package com.serbest.magazine.backend.common.mapper;
 
+import com.serbest.magazine.backend.common.dto.MasterpieceListResponseDTO;
 import com.serbest.magazine.backend.common.dto.MasterpieceOfTheWeekResponseDTO;
 import com.serbest.magazine.backend.common.dto.MasterpieceRequestDTO;
 import com.serbest.magazine.backend.common.dto.MasterpieceResponseDTO;
@@ -48,6 +49,15 @@ public class MasterpieceMapper {
                 .showLink(requestDTO.getShowLink())
                 .showLink2(requestDTO.getShowLink2())
                 .marketLink(requestDTO.getMarketLink())
+                .build();
+    }
+
+    public MasterpieceListResponseDTO masterpieceToMasterpieceListResponseDTO(Masterpiece masterpiece){
+        return MasterpieceListResponseDTO.builder()
+                .id(masterpiece.getId())
+                .title(masterpiece.getTitle())
+                .owner(masterpiece.getOwner())
+                .createDateTime(masterpiece.getCreateDateTime())
                 .build();
     }
 

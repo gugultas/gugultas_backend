@@ -1,9 +1,9 @@
 info:
   application:
-    name: free-magazine
-    description: An e-magazine app in which anybody talk about anything.
+    name: Gugultaş
+    description: Eleştirilere açık , özgün fikirlere sahip ve kalemi keskin olan her vatandaşımızı dergimize davet ediyoruz..
     author: goldeneagle3
     version: '@project.version@'
 spring:
   profiles:
-    active: ${PROFILE}
+    active: ${PROD}

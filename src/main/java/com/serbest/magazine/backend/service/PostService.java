@@ -1,5 +1,6 @@
 package com.serbest.magazine.backend.service;
 
+import com.serbest.magazine.backend.dto.general.MessageResponseDTO;
 import com.serbest.magazine.backend.dto.post.*;
 
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public interface PostService {
     PostResponseDTO updatePostEditor(String id, PostUpdateEditorRequestDTO requestDTO) throws IOException;
     PostResponseDTO deactivatePost(String id) throws AccessDeniedException;
     PostResponseDTO activatePost(String id);
+    MessageResponseDTO deletePost(String id);
     List<PostResponseDTO> getRandomThreePost();
     List<PostResponseDTO> getPostsByCategory(String categoryName);
     List<PostResponseDTO> getPostsBySubCategory(String subCategoryId);

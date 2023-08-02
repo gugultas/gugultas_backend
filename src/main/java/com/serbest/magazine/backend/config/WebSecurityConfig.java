@@ -78,6 +78,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/likes/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/musics/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/pictures/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/encyclopediaArticles/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/playlists/**").permitAll()
                                 .requestMatchers("/api/auth/logout").authenticated()

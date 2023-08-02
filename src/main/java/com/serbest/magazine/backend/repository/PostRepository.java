@@ -37,7 +37,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
     List<Post> findAllBySubCategoryIdAndActiveTrueOrderByCreateDateTimeDesc(UUID categoryId);
 
-    List<Post> findByTitleContainingIgnoreCase(String title);
+    List<Post> findByActiveTrueAndTitleContainingIgnoreCase(String title);
 
     Integer countByCategoryNameAndActiveTrue(String categoryName);
 
