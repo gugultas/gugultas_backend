@@ -2,6 +2,8 @@ package com.serbest.magazine.backend.repository;
 
 import com.serbest.magazine.backend.entity.Playlist;
 import com.serbest.magazine.backend.entity.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,7 @@ import java.util.UUID;
 
 @Transactional
 public interface PostRepository extends JpaRepository<Post, UUID> {
-    List<Post> findByActiveTrueOrderByCreateDateTimeDesc();
+    Page<Post> findByActiveTrueOrderByCreateDateTimeDesc(Pageable pageable);
 
     List<Post> findByActiveFalseOrderByCreateDateTimeDesc();
 
@@ -28,14 +30,15 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     List<Post> findFifteenActiveTrueByCreateDateTimeOffset5();
 
     List<Post> findAllByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(String username);
+    Page<Post> findAllByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(String username,Pageable pageable);
 
     List<Post> findTop5ByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(String username);
 
-    List<Post> findAllByCategoryNameAndActiveTrueOrderByCreateDateTimeDesc(String categoryName);
+    Page<Post> findAllByCategoryNameAndActiveTrueOrderByCreateDateTimeDesc(String categoryName,Pageable pageable);
 
     List<Post> findByPlaylistsInOrderByCreateDateTimeDesc(List<Playlist> playlists);
 
-    List<Post> findAllBySubCategoryIdAndActiveTrueOrderByCreateDateTimeDesc(UUID categoryId);
+    Page<Post> findAllBySubCategoryIdAndActiveTrueOrderByCreateDateTimeDesc(UUID categoryId,Pageable pageable);
 
     List<Post> findByActiveTrueAndTitleContainingIgnoreCase(String title);
 

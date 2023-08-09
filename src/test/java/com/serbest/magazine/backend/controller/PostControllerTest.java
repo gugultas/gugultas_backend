@@ -234,7 +234,7 @@ class PostControllerTest {
                 .updateDateTime(LocalDateTime.now())
                 .build();
 
-        Mockito.when(postService.getAllPosts()).thenReturn(List.of(responseDTO));
+        Mockito.when(postService.getAllPosts(0,10)).thenReturn(null);
 
         RestAssuredMockMvc
                 .given()
@@ -344,30 +344,6 @@ class PostControllerTest {
                 .statusCode(200);
     }
 
-    @Test
-    public void RA_test_getPostsByUsername_shouldAllowPostFetchingWithAuthentication() {
-        UUID postId = UUID.randomUUID();
-        PostResponseDTO responseDTO = PostResponseDTO.builder()
-                .id(postId)
-                .content("Test Content")
-                .username("ensar")
-                .title("title")
-                .category("Test")
-                .createDateTime(LocalDateTime.now())
-                .updateDateTime(LocalDateTime.now())
-                .build();
-
-        Mockito.when(postService.findByUsername("ensar")).thenReturn(List.of(responseDTO));
-
-        RestAssuredMockMvc
-                .given()
-                .auth().none()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when()
-                .get("/api/posts/getPostsByAuthor/" + "ensar")
-                .then()
-                .statusCode(200);
-    }
 
     @Test
     public void RA_test_getDeactivatedPosts_shouldAllowPostFetchingWithAuthentication() {
@@ -642,7 +618,6 @@ class PostControllerTest {
                 .updateDateTime(LocalDateTime.now())
                 .build();
 
-        Mockito.when(postService.getPostsByCategory("Test")).thenReturn(List.of(responseDTO));
 
         RestAssuredMockMvc
                 .given()

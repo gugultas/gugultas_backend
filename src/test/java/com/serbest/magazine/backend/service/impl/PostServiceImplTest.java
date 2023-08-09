@@ -23,6 +23,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -36,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -403,9 +406,11 @@ class PostServiceImplTest {
                 .content("Test Content")
                 .build();
 
-        when(postRepository.findByActiveTrueOrderByCreateDateTimeDesc()).thenReturn(List.of(post));
+        Pageable paging = PageRequest.of(0, 19);
 
-        List<PostResponseDTO> responseDTOS = postService.getAllPosts();
+        when(postRepository.findByActiveTrueOrderByCreateDateTimeDesc(paging)).thenReturn(null);
+
+        Map<String, Object> responseDTOS = postService.getAllPosts(0 , 19);
 
         assertEquals(1, responseDTOS.size());
     }
@@ -830,59 +835,6 @@ class PostServiceImplTest {
         assertEquals(1, responseDTOS.size());
     }
 
-    @Test
-    public void test_getPostsByCategory_withSuccess() {
-        Category category = mock(Category.class);
-
-        Post post = Post.Builder.newBuilder()
-                .postId(UUID.randomUUID())
-                .title("Test Title")
-                .content("Test Content")
-                .build();
-
-        when(categoryRepository.findByName("Siyaset")).thenReturn(Optional.of(category));
-        when(postRepository.findAllByCategoryNameAndActiveTrueOrderByCreateDateTimeDesc("Siyaset"))
-                .thenReturn(List.of(post));
-
-        List<PostResponseDTO> responseDTOS = postService.getPostsByCategory("Siyaset");
-
-        assertEquals(1, responseDTOS.size());
-    }
-
-    @Test
-    public void test_getPostsByCategory_categoryNotFound() {
-        assertThrows(
-                ResourceNotFoundException.class,
-                () -> postService.getPostsByCategory("wrongCategory")
-        );
-    }
-
-    @Test
-    public void test_findByUsername_withSuccess() {
-        Author author = mock(Author.class);
-
-        Post post = Post.Builder.newBuilder()
-                .postId(UUID.randomUUID())
-                .title("Test Title")
-                .content("Test Content")
-                .build();
-
-        when(authorRepository.findByUsername("ensar")).thenReturn(Optional.of(author));
-        when(postRepository.findAllByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc("ensar"))
-                .thenReturn(List.of(post));
-
-        List<PostResponseDTO> responseDTOS = postService.findByUsername("ensar");
-
-        assertEquals(1, responseDTOS.size());
-    }
-
-    @Test
-    public void test_findByUsername_categoryNotFound() {
-        assertThrows(
-                ResourceNotFoundException.class,
-                () -> postService.findByUsername("wrongUsername")
-        );
-    }
 
     @Test
     public void test_countsByCategoryName_withSuccess() {

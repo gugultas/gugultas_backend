@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -32,6 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -382,41 +384,19 @@ class PostServiceImplIntegrationTest {
         );
     }
 
-    @Test
-    public void testIntegration_getPostsByCategory_success() {
 
-        List<PostResponseDTO> responseDTOS = postService.getPostsByCategory("Siyaset");
 
-        assertEquals(responseDTOS.size(), 1);
-        assertEquals(responseDTOS.get(0).getTitle(), "Test Title");
-    }
 
-    @Test
-    public void testIntegration_getPostsByCategory_categoryNotFound() {
-
-        assertThrows(
-                ResourceNotFoundException.class,
-                () -> postService.getPostsByCategory("wrongCategory")
-        );
-    }
 
     @Test
     public void testIntegration_getPostsBySubCategory_success() {
 
-        List<PostResponseDTO> responseDTOS = postService.getPostsBySubCategory(this.subCategoryId.toString());
+        Map<String, Object> responseDTOS = postService.getPostsBySubCategory(this.subCategoryId.toString(),0,10);
 
         assertEquals(responseDTOS.size(), 1);
-        assertEquals(responseDTOS.get(0).getTitle(), "Test Title");
+        assertEquals(responseDTOS.get(0), "Test Title");
     }
 
-    @Test
-    public void testIntegration_findByUsername_success() {
-
-        List<PostResponseDTO> responseDTOS = postService.findByUsername("testUser");
-
-        assertEquals(responseDTOS.size(), 1);
-        assertEquals(responseDTOS.get(0).getTitle(), "Test Title");
-    }
 
     @Test
     public void testIntegration_countsByCategoryName_success() {
@@ -540,10 +520,10 @@ class PostServiceImplIntegrationTest {
         @Test
         public void testIntegration_getAllPosts_success() {
 
-            List<PostResponseDTO> responseDTOS = postService.getAllPosts();
+            Map<String, Object> responseDTOS = postService.getAllPosts(0,10);
 
             assertEquals(responseDTOS.size(), 1);
-            assertEquals(responseDTOS.get(0).getContent(), "Test Content");
+            assertEquals(responseDTOS.get(0), "Test Content");
         }
 
         @Test

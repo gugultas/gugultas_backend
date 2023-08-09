@@ -14,6 +14,9 @@ import com.serbest.magazine.backend.security.CheckAuthorization;
 import com.serbest.magazine.backend.util.UploadImage;
 
 import io.jsonwebtoken.lang.Assert;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,9 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,12 +77,12 @@ public class PostServiceImpl implements PostService {
                 () -> new ResourceNotFoundException("Sub-Category", "name", requestDTO.getSubCategory())
         );
 
-        if (!user.isEnabled()){
+        if (!user.isEnabled()) {
             throw new CustomApplicationException(HttpStatus.BAD_REQUEST,
                     "Hesabınız aktive edilmemiştir.");
         }
 
-        if (!category.getName().equals(subCategory.getCategory().getName())){
+        if (!category.getName().equals(subCategory.getCategory().getName())) {
             throw new CustomApplicationException(HttpStatus.BAD_REQUEST,
                     "The Sub-Category is not belong to selected category.");
         }
@@ -122,12 +123,12 @@ public class PostServiceImpl implements PostService {
                 () -> new ResourceNotFoundException("Sub-Category", "name", requestDTO.getSubCategory())
         );
 
-        if (!user.isEnabled()){
+        if (!user.isEnabled()) {
             throw new CustomApplicationException(HttpStatus.BAD_REQUEST,
                     "Hesabınız aktive edilmemiştir.");
         }
 
-        if (!category.getName().equals(subCategory.getCategory().getName())){
+        if (!category.getName().equals(subCategory.getCategory().getName())) {
             throw new CustomApplicationException(HttpStatus.BAD_REQUEST,
                     "The Sub-Category is not belong to selected category.");
         }
@@ -146,13 +147,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDTO> getAllPosts() {
-        List<Post> posts = postRepository.findByActiveTrueOrderByCreateDateTimeDesc();
+    public Map<String, Object> getAllPosts(Integer page, Integer size) {
 
-        return posts
-                .stream()
-                .map(postMapper::postToPostResponseDTO)
-                .collect(Collectors.toList());
+        Pageable paging = PageRequest.of(page, size);
+
+        Page<Post> posts = postRepository.findByActiveTrueOrderByCreateDateTimeDesc(paging);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", posts.getContent().stream().map(postMapper::postToPostResponseDTO).collect(Collectors.toList()));
+        response.put("currentPage", posts.getNumber());
+        response.put("totalItems", posts.getTotalElements());
+        response.put("totalPages", posts.getTotalPages());
+
+        return response;
     }
 
     @Override
@@ -246,7 +253,7 @@ public class PostServiceImpl implements PostService {
                 () -> new ResourceNotFoundException("Sub-Category", "name", requestDTO.getSubCategory())
         );
 
-        if (!category.getName().equals(subCategory.getCategory().getName())){
+        if (!category.getName().equals(subCategory.getCategory().getName())) {
             throw new CustomApplicationException(HttpStatus.BAD_REQUEST,
                     "The Sub-Category is not belong to selected category.");
         }
@@ -274,7 +281,7 @@ public class PostServiceImpl implements PostService {
 
         postRepository.deleteById(post.getPostId());
 
-        return new MessageResponseDTO(post.getTitle() +  " başlıklı postunuz başırılı bir şekilde silinmiştir.");
+        return new MessageResponseDTO(post.getTitle() + " başlıklı postunuz başırılı bir şekilde silinmiştir.");
     }
 
     @Override
@@ -298,7 +305,7 @@ public class PostServiceImpl implements PostService {
                 () -> new ResourceNotFoundException("Sub-Category", "name", requestDTO.getSubCategory())
         );
 
-        if (!category.getName().equals(subCategory.getCategory().getName())){
+        if (!category.getName().equals(subCategory.getCategory().getName())) {
             throw new CustomApplicationException(HttpStatus.BAD_REQUEST,
                     "The Sub-Category is not belong to selected category.");
         }
@@ -328,29 +335,43 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDTO> getPostsByCategory(String categoryName) {
+    public Map<String, Object> getPostsByCategory(String categoryName, Integer page, Integer size) {
         categoryRepository.findByName(categoryName).orElseThrow(
                 () -> new ResourceNotFoundException("Category", "name", categoryName)
         );
-        List<Post> posts = postRepository.findAllByCategoryNameAndActiveTrueOrderByCreateDateTimeDesc(categoryName);
-        return posts
-                .stream()
-                .map(postMapper::postToPostResponseDTO)
-                .collect(Collectors.toList());
+
+        Pageable paging = PageRequest.of(page, size);
+
+        Page<Post> posts = postRepository.findAllByCategoryNameAndActiveTrueOrderByCreateDateTimeDesc(categoryName, paging);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", posts.getContent().stream().map(postMapper::postToPostResponseDTO).collect(Collectors.toList()));
+        response.put("currentPage", posts.getNumber());
+        response.put("totalItems", posts.getTotalElements());
+        response.put("totalPages", posts.getTotalPages());
+
+        return response;
     }
 
     @Override
-    public List<PostResponseDTO> getPostsBySubCategory(String subCategoryId) {
-        subCategoryRepository.findById(UUID.fromString(subCategoryId)).orElseThrow(
+    public Map<String, Object> getPostsBySubCategory(String subCategoryId, Integer page, Integer size) {
+        SubCategory subCategory = subCategoryRepository.findById(UUID.fromString(subCategoryId)).orElseThrow(
                 () -> new ResourceNotFoundException("Sub Category", "id", subCategoryId)
         );
-        List<Post> posts =
+
+        Pageable paging = PageRequest.of(page, size);
+
+        Page<Post> posts =
                 postRepository
-                        .findAllBySubCategoryIdAndActiveTrueOrderByCreateDateTimeDesc(UUID.fromString(subCategoryId));
-        return posts
-                .stream()
-                .map(postMapper::postToPostResponseDTO)
-                .collect(Collectors.toList());
+                        .findAllBySubCategoryIdAndActiveTrueOrderByCreateDateTimeDesc(UUID.fromString(subCategoryId), paging);
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", posts.getContent().stream().map(postMapper::postToPostResponseDTO).collect(Collectors.toList()));
+        response.put("currentPage", posts.getNumber());
+        response.put("totalItems", posts.getTotalElements());
+        response.put("totalPages", posts.getTotalPages());
+        response.put("title", subCategory.getName());
+
+        return response;
     }
 
     @Override
@@ -363,16 +384,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDTO> findByUsername(String username) {
+    public Map<String, Object> findByUsername(String username, Integer page, Integer size) {
         userRepository.findByUsername(username).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "username", username)
         );
-        List<Post> posts = postRepository.findAllByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(username);
 
-        return posts
-                .stream()
-                .map(postMapper::postToPostResponseDTO)
-                .collect(Collectors.toList());
+        Pageable paging = PageRequest.of(page, size);
+
+        Page<Post> posts = postRepository.findAllByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(username, paging);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", posts.getContent().stream().map(postMapper::postToPostResponseDTO).collect(Collectors.toList()));
+        response.put("currentPage", posts.getNumber());
+        response.put("totalItems", posts.getTotalElements());
+        response.put("totalPages", posts.getTotalPages());
+
+        return response;
     }
 
     @Override
@@ -395,7 +422,7 @@ public class PostServiceImpl implements PostService {
         List<Playlist> playlists = new ArrayList<>();
 
         Playlist playlist = playlistRepository.findById(UUID.fromString(playlistId)).orElseThrow(
-                () -> new ResourceNotFoundException("Playlist","id",playlistId)
+                () -> new ResourceNotFoundException("Playlist", "id", playlistId)
         );
 
         playlists.add(playlist);
@@ -409,16 +436,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostsOfAuthorForPlaylistResponseDTO> getPostsOfAuthorForPlaylist(String username,String playlistId) {
+    public List<PostsOfAuthorForPlaylistResponseDTO> getPostsOfAuthorForPlaylist(String username, String playlistId) {
         Playlist playlist = playlistRepository.findById(UUID.fromString(playlistId)).orElseThrow(
-                () -> new ResourceNotFoundException("Playlist","id",playlistId)
+                () -> new ResourceNotFoundException("Playlist", "id", playlistId)
         );
 
         return postRepository
                 .findAllByAuthorUsernameAndActiveTrueOrderByCreateDateTimeDesc(username)
                 .stream()
                 .filter(post -> !post.getPlaylists().contains(playlist))
-                .map(post -> new PostsOfAuthorForPlaylistResponseDTO(post.getPostId(),post.getTitle()))
+                .map(post -> new PostsOfAuthorForPlaylistResponseDTO(post.getPostId(), post.getTitle()))
                 .collect(Collectors.toList());
     }
 

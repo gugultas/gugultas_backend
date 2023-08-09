@@ -8,12 +8,13 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface PostService {
     PostCreateResponseDTO createPost(PostRequestDTO requestDTO);
     PostCreateResponseDTO createPostEditor(PostCreateEditorRequestDTO requestDTO) throws IOException;
-    List<PostResponseDTO> getAllPosts();
+    Map<String, Object> getAllPosts(Integer page , Integer size);
     List<FirstFivePostsListDTO> getFirstFivePosts();
     List<MainPagePostsListDTO> getFourPostsForTop();
     List<MainPagePostsListDTO> getPostsForMainPage();
@@ -25,12 +26,12 @@ public interface PostService {
     PostResponseDTO activatePost(String id);
     MessageResponseDTO deletePost(String id);
     List<PostResponseDTO> getRandomThreePost();
-    List<PostResponseDTO> getPostsByCategory(String categoryName);
-    List<PostResponseDTO> getPostsBySubCategory(String subCategoryId);
+    Map<String, Object> getPostsByCategory(String categoryName,Integer page,Integer size);
+    Map<String, Object> getPostsBySubCategory(String subCategoryId,Integer page,Integer size);
     List<AuthorsLastFivePosts> getLastFivePostsOfAuthor(String username);
     List<PlaylistPostListResponseDTO> getPostsByPlaylist(String playlistId);
     List<PostsOfAuthorForPlaylistResponseDTO> getPostsOfAuthorForPlaylist(String username,String playlistId);
     List<PostResponseDTO> searchPosts(String keyword);
-    List<PostResponseDTO> findByUsername(String userId);
+    Map<String, Object> findByUsername(String userId, Integer page, Integer size);
     Integer countsByCategoryName(String categoryName);
 }
