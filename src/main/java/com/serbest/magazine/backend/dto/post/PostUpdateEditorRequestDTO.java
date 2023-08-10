@@ -19,6 +19,7 @@ public class PostUpdateEditorRequestDTO {
     private String title;
 
     private String subtitle;
+    private String description;
 
     @NotBlank(message = "Please provide your content.")
     // @Size(min = 250,message = "Content size cannot be less than 250 characters.")

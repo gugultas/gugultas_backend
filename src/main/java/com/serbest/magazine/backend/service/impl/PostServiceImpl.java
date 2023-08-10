@@ -318,6 +318,7 @@ public class PostServiceImpl implements PostService {
             post.setSubCategory(subCategory);
             post.setTitle(requestDTO.getTitle());
             post.setSubtitle(requestDTO.getSubtitle());
+            post.setDescription(requestDTO.getDescription());
             post.setContent(requestDTO.getContent());
             return postMapper.postToPostResponseDTO(postRepository.save(post));
         } catch (Exception e) {

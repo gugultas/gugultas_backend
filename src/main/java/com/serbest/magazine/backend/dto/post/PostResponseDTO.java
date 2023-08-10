@@ -16,6 +16,7 @@ public class PostResponseDTO {
     private UUID id;
     private String title;
     private String subtitle;
+    private String description;
     private String content;
     private String category;
     private String subCategory;

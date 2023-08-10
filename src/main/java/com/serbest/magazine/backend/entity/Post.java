@@ -18,7 +18,10 @@ public class Post {
     private UUID postId;
 
     private String title;
+
     private String subtitle;
+
+    private String description;
 
     @Lob
     private String content;
@@ -64,16 +67,22 @@ public class Post {
     private LocalDateTime updateDateTime;
 
 
-    public Post(UUID postId, String title, String subtitle, String content, Boolean active, Category category,
-                SubCategory subCategory, Author author, ImageModel postImage, LocalDateTime createDateTime, LocalDateTime updateDateTime) {
+    public Post(UUID postId, String title, String subtitle, String description, String content, Boolean active,
+                Category category, SubCategory subCategory, Author author, Set<Playlist> playlists, List<Like> likes,
+                List<Comment> comments, ImageModel postImage, LocalDateTime createDateTime,
+                LocalDateTime updateDateTime) {
         this.postId = postId;
         this.title = title;
         this.subtitle = subtitle;
+        this.description = description;
         this.content = content;
         this.active = active;
         this.category = category;
         this.subCategory = subCategory;
         this.author = author;
+        this.playlists = playlists;
+        this.likes = likes;
+        this.comments = comments;
         this.postImage = postImage;
         this.createDateTime = createDateTime;
         this.updateDateTime = updateDateTime;
@@ -86,6 +95,7 @@ public class Post {
         setPostId(builder.postId);
         setTitle(builder.title);
         setSubtitle(builder.subtitle);
+        setDescription(builder.description);
         setContent(builder.content);
         setActive(builder.active);
         setCategory(builder.category);
@@ -117,6 +127,14 @@ public class Post {
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getContent() {
@@ -214,6 +232,7 @@ public class Post {
         private UUID postId;
         private String title;
         private String subtitle;
+        private String description;
         private String content;
         private Boolean active;
         private Category category;
@@ -245,6 +264,11 @@ public class Post {
 
         public Builder content(String val) {
             content = val;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
             return this;
         }
 

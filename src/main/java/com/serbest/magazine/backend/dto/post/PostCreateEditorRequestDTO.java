@@ -18,6 +18,7 @@ public class PostCreateEditorRequestDTO {
     private String title;
 
     private String subtitle;
+    private String description;
 
     @NotBlank(message = "Please provide a author.")
     private String author;
